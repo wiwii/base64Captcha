@@ -200,3 +200,5 @@ func GenerateCaptcha(idKey string, configuration interface{}) (id string, captch
 
 	return idKey, captchaInstance
 }
+
+

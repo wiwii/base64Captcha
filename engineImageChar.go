@@ -54,6 +54,7 @@ type ConfigCharacter struct {
 	// CaptchaLen Default number of digits in captcha solution.
 	// 默认数字验证长度6.
 	CaptchaLen int
+	Content string
 }
 type point struct {
 	X int
@@ -366,20 +367,26 @@ func EngineCharCreate(config ConfigCharacter) *CaptchaImageChar {
 	}
 	var captchaContent string
 
-	switch config.Mode {
-	case CaptchaModeAlphabet:
-		captchaContent = randText(config.CaptchaLen, TxtAlphabet)
+	if config.Content != "" {
+		captchaContent = config.Content
 		captchaImage.VerifyValue = captchaContent
-	case CaptchaModeArithmetic:
-		captchaContent, captchaImage.VerifyValue = randArithmetic()
+	} else {
+		switch config.Mode {
+		case CaptchaModeAlphabet:
+			captchaContent = randText(config.CaptchaLen, TxtAlphabet)
+			captchaImage.VerifyValue = captchaContent
+		case CaptchaModeArithmetic:
+			captchaContent, captchaImage.VerifyValue = randArithmetic()
 
-	case CaptchaModeNumber:
-		captchaContent = randText(config.CaptchaLen, TxtNumbers)
-		captchaImage.VerifyValue = captchaContent
-	default:
-		captchaContent = randText(config.CaptchaLen, TxtSimpleCharaters)
-		captchaImage.VerifyValue = captchaContent
+		case CaptchaModeNumber:
+			captchaContent = randText(config.CaptchaLen, TxtNumbers)
+			captchaImage.VerifyValue = captchaContent
+		default:
+			captchaContent = randText(config.CaptchaLen, TxtSimpleCharaters)
+			captchaImage.VerifyValue = captchaContent
+		}
 	}
+	
 	//写入string
 	captchaImage.drawText(captchaContent, config.IsUseSimpleFont)
 	captchaImage.Content = captchaContent
