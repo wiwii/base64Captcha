@@ -16,6 +16,8 @@ func TestRandColorZone(t *testing.T) {
 	//	fmt.Printf("a=[%v]\n", a)
 	//}
 
-	fontSize := float64(44) / (1 + 0.4)
+	//fontSize := float64(44) / (1 + 0.4)
+	//fmt.Printf("1=[%v]\n", fontSize)
+	fontSize := randFontFamily().Name
 	fmt.Printf("1=[%v]\n", fontSize)
 }

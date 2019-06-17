@@ -7,30 +7,44 @@ import (
 )
 
 //FontFamilyOfBytes read all font to bytes.
+type FontNameBinPair struct {
+	Name string
+	Bin  *truetype.Font
+}
 
 //readFontsToSliceOfTrueTypeFonts import fonts from dir.
 //make the simple-font(RitaSmith.ttf) the first font of trueTypeFonts.
-func readFontsToSliceOfTrueTypeFonts() []*truetype.Font {
-	fonts := make([]*truetype.Font, 0)
+func readFontsToSliceOfTrueTypeFonts() []FontNameBinPair {
+	fonts := make([]FontNameBinPair, 0)
 	//RitaSmith.ttf is first element for font simple mode.
-	assetFontNames := []string{"fonts/RitaSmith.ttf", "fonts/actionj.ttf", "fonts/chromohv.ttf", "fonts/Flim-Flam.ttf", "fonts/DeborahFancyDress.ttf", "fonts/DENNEthree-dee.ttf", "fonts/Comismsh.ttf", "fonts/ApothecaryFont.ttf", "fonts/3Dumb.ttf"}
+	assetFontNames := []string{"fonts/RitaSmith.ttf",
+		"fonts/actionj.ttf", "fonts/chromohv.ttf",
+		"fonts/Flim-Flam.ttf", "fonts/DeborahFancyDress.ttf",
+		"fonts/DENNEthree-dee.ttf", "fonts/Comismsh.ttf",
+		"fonts/ApothecaryFont.ttf", "fonts/3Dumb.ttf"}
 	for _, assetName := range assetFontNames {
 		fonts = appendAssetFontToTrueTypeFonts(assetName, fonts)
 	}
 	return fonts
 }
-func appendAssetFontToTrueTypeFonts(assetName string, fonts []*truetype.Font) []*truetype.Font {
+func appendAssetFontToTrueTypeFonts(assetName string, fonts []FontNameBinPair) []FontNameBinPair {
 	fontBytes, _ := Asset(assetName)
 	//font file bytes to trueTypeFont
 	trueTypeFont, _ := freetype.ParseFont(fontBytes)
-	fonts = append(fonts, trueTypeFont)
+	fonts = append(fonts, FontNameBinPair{Name: assetName, Bin: trueTypeFont})
 	return fonts
 }
 
 //randFontFamily choose random font family.选择随机的字体
-func randFontFamily() *truetype.Font {
+func randFontFamily() FontNameBinPair {
 	fontCount := len(trueTypeFontFamilys)
 	index := rand.Intn(fontCount)
+	return trueTypeFontFamilys[index]
+}
+
+func randFontFamilyWithRand(r *rand.Rand) FontNameBinPair {
+	fontCount := len(trueTypeFontFamilys)
+	index := r.Intn(fontCount)
 	return trueTypeFontFamilys[index]
 }
 

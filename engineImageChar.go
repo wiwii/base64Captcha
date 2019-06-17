@@ -290,10 +290,10 @@ func (captcha *CaptchaImageChar) drawTextNoise(complex int, isSimpleFont bool) e
 		c.SetFontSize(fontSize)
 
 		if isSimpleFont {
-			c.SetFont(trueTypeFontFamilys[0])
+			c.SetFont(trueTypeFontFamilys[0].Bin)
 		} else {
 			f := randFontFamily()
-			c.SetFont(f)
+			c.SetFont(f.Bin)
 		}
 
 		pt := freetype.Pt(rw, rh)
@@ -317,7 +317,7 @@ func (captcha *CaptchaImageChar) drawText(text string, isSimpleFont bool, config
 	fontWidth := captcha.ImageWidth / len(text)
 	r := randSeed()
 	for i, s := range text {
-		f := float64(rand.Intn(7)) / float64(9)
+		f := float64(r.Intn(7)) / float64(9)
 		fmt.Printf("f=[%v,%v]\n", f, config.FontSizeMin)
 		if f > config.FontSizeMin {
 			f = config.FontSizeMin
@@ -335,10 +335,11 @@ func (captcha *CaptchaImageChar) drawText(text string, isSimpleFont bool, config
 		c.SetFontSize(fontSize)
 
 		if isSimpleFont {
-			c.SetFont(trueTypeFontFamilys[0])
+			c.SetFont(trueTypeFontFamilys[0].Bin)
 		} else {
-			f := randFontFamily()
-			c.SetFont(f)
+			f := randFontFamilyWithRand(r)
+			fmt.Printf("fontname=[%v]\n", f.Name)
+			c.SetFont(f.Bin)
 		}
 
 		x := int(fontWidth)*i + int(fontWidth)/int(fontSize)
