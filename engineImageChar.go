@@ -59,6 +59,8 @@ type ConfigCharacter struct {
 	IsUseCustomFontColor bool
 	FontColorFilter      func(color.RGBA) color.RGBA
 	FontSizeMin          float64
+	FontName             string
+	IsUseFontName        bool
 
 	// CaptchaLen Default number of digits in captcha solution.
 	// 默认数字验证长度6.
@@ -336,6 +338,8 @@ func (captcha *CaptchaImageChar) drawText(text string, isSimpleFont bool, config
 
 		if isSimpleFont {
 			c.SetFont(trueTypeFontFamilys[0].Bin)
+		} else if config.IsUseFontName {
+			c.SetFont(getFontFromName(config.FontName).Bin)
 		} else {
 			f := randFontFamilyWithRand(r)
 			//fmt.Printf("fontname=[%v]\n", f.Name)

@@ -12,16 +12,27 @@ type FontNameBinPair struct {
 	Bin  *truetype.Font
 }
 
+func getFontFromName(name string) FontNameBinPair {
+	for _, v := range trueTypeFontFamilys {
+		if v.Name == name {
+			return v
+		}
+	}
+	return FontNameBinPair{}
+}
+
 //readFontsToSliceOfTrueTypeFonts import fonts from dir.
 //make the simple-font(RitaSmith.ttf) the first font of trueTypeFonts.
 func readFontsToSliceOfTrueTypeFonts() []FontNameBinPair {
 	fonts := make([]FontNameBinPair, 0)
 	//RitaSmith.ttf is first element for font simple mode.
-	assetFontNames := []string{"fonts/RitaSmith.ttf",
+	assetFontNames := []string{
+		"fonts/RitaSmith.ttf",
 		"fonts/actionj.ttf", "fonts/chromohv.ttf",
 		"fonts/Flim-Flam.ttf", "fonts/DeborahFancyDress.ttf",
 		"fonts/DENNEthree-dee.ttf", "fonts/Comismsh.ttf",
-		"fonts/ApothecaryFont.ttf", "fonts/3Dumb.ttf"}
+		"fonts/ApothecaryFont.ttf", "fonts/3Dumb.ttf",
+	}
 	for _, assetName := range assetFontNames {
 		fonts = appendAssetFontToTrueTypeFonts(assetName, fonts)
 	}

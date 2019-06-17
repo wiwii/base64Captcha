@@ -120,10 +120,10 @@ func randSeed() *rand.Rand {
 	return rand.New(rand.NewSource(time.Now().UnixNano()))
 }
 
-//randColor get random color. 生成随机颜色.
+//randColor get random color. 生成随机颜色
 func randColorZone(r *rand.Rand, zone [][]int, f func(color.RGBA) color.RGBA) color.RGBA {
-	for k,v := range zone {
-		for k2,v2 := range v {
+	for k, v := range zone {
+		for k2, v2 := range v {
 			if v2 < 0 {
 				zone[k][k2] = 0
 			} else if v2 > 255 {
@@ -164,3 +164,9 @@ func randDeepColorZone(r *rand.Rand, zone [][]int, f func(color.RGBA) color.RGBA
 	return color.RGBA{R: uint8(red), G: uint8(green), B: uint8(blue), A: uint8(255)}
 }
 
+func calcHsl_L(r, g, b int) float64 {
+	f_r := float64(r)
+	f_g := float64(g)
+	f_b := float64(b)
+	return (math.Max(math.Max(f_r/256, f_g/256), f_b/256) + math.Min(math.Min(f_r/256, f_g/256), f_b/256)) / 2.0
+}
