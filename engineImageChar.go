@@ -318,10 +318,12 @@ func (captcha *CaptchaImageChar) drawText(text string, isSimpleFont bool, config
 	r := randSeed()
 	for i, s := range text {
 		f := float64(rand.Intn(7)) / float64(9)
+		fmt.Printf("f=[%v,%v]\n", f, config.FontSizeMin)
 		if f > config.FontSizeMin {
 			f = config.FontSizeMin
 		}
 		fontSize := float64(captcha.ImageHeight) / (1 + f)
+		fmt.Printf("fontSize=[%v]\n", fontSize)
 
 		var fontColor color.RGBA
 		if config.IsUseCustomFontColor {
