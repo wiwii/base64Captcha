@@ -54,7 +54,7 @@ type ConfigCharacter struct {
 	// RGB = 0 1 2
 	// 0-255
 	// [0 | 1 | 2][2]
-	FontColorZone [][]uint8
+	FontColorZone [][]int
 	// 自定义颜色范围
 	IsUseCustomFontColor bool
 	FontColorFilter func(color.RGBA) color.RGBA
