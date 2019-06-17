@@ -147,6 +147,8 @@ func randColorZone(zone [][]uint8, f func(color.RGBA) color.RGBA) color.RGBA {
 		blue = 255
 	}
 	rgba := color.RGBA{R: uint8(red), G: uint8(green), B: uint8(blue), A: uint8(255)}
-	rgba2 := f(rgba)
-	return rgba2
+	if f != nil {
+		rgba = f(rgba)
+	}
+	return rgba
 }

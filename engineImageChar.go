@@ -321,7 +321,6 @@ func (captcha *CaptchaImageChar) drawText(text string, isSimpleFont bool, fontSi
 
 	for i, s := range text {
 		fontSize := float64(captcha.ImageHeight) / (1 + float64(rand.Intn(7))/float64(9))
-		log.Printf("fontSize=[%v],fontSizeMin=[%v]\n", fontSize, fontSizeMin)
 		if fontSize < fontSizeMin {
 			fontSize = fontSizeMin
 		}
