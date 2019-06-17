@@ -354,8 +354,9 @@ func (captcha *CaptchaImageChar) drawText(text string, isSimpleFont bool, fontSi
 //EngineCharCreate create captcha with config struct.
 func EngineCharCreate(config ConfigCharacter) *CaptchaImageChar {
 	var fontColor color.RGBA
+	r := randSeed()
 	if config.IsUseCustomFontColor {
-		fontColor = randColorZone(config.FontColorZone, config.FontColorFilter)
+		fontColor = randColorZone(r, config.FontColorZone, config.FontColorFilter)
 	} else {
 		fontColor = randLightColor()
 	}

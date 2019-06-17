@@ -121,9 +121,7 @@ func randSeed() *rand.Rand {
 }
 
 //randColor get random color. 生成随机颜色.
-func randColorZone(zone [][]int, f func(color.RGBA) color.RGBA) color.RGBA {
-	r := randSeed()
-
+func randColorZone(r *rand.Rand, zone [][]int, f func(color.RGBA) color.RGBA) color.RGBA {
 	for k,v := range zone {
 		for k2,v2 := range v {
 			if v2 < 0 {
@@ -137,15 +135,6 @@ func randColorZone(zone [][]int, f func(color.RGBA) color.RGBA) color.RGBA {
 	red := r.Intn(zone[0][0]) + zone[0][1]
 	green := r.Intn(zone[1][0]) + zone[1][1]
 	blue := r.Intn(zone[2][0]) + zone[2][1]
-
-	if (red + green) > 400 {
-		blue = 0
-	} else {
-		blue = 400 - green - red
-	}
-	if blue > 255 {
-		blue = 255
-	}
 	rgba := color.RGBA{R: uint8(red), G: uint8(green), B: uint8(blue), A: uint8(255)}
 	if f != nil {
 		rgba = f(rgba)
