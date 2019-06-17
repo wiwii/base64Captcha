@@ -50,11 +50,19 @@ type ConfigCharacter struct {
 	IsShowSlimeLine bool
 	//IsShowSineLine is show sine line.
 	IsShowSineLine bool
+	// 字符颜色范围
+	// RGB = 0 1 2
+	// 0-255
+	// [0 | 1 | 2][2]
+	FontColorZone [][]uint8
+	// 自定义颜色范围
+	IsUseCustomFontColor bool
+	FontColorFilter func(color.RGBA) color.RGBA
 
 	// CaptchaLen Default number of digits in captcha solution.
 	// 默认数字验证长度6.
 	CaptchaLen int
-	Content string
+	Content    string
 }
 type point struct {
 	X int
@@ -339,8 +347,13 @@ func (captcha *CaptchaImageChar) drawText(text string, isSimpleFont bool) error 
 
 //EngineCharCreate create captcha with config struct.
 func EngineCharCreate(config ConfigCharacter) *CaptchaImageChar {
-
-	captchaImage, err := newCaptchaImage(config.Width, config.Height, randLightColor())
+	var fontColor color.RGBA
+	if config.IsUseCustomFontColor {
+		fontColor = randColorZone(config.FontColorZone, config.FontColorFilter)
+	} else {
+		fontColor = randLightColor()
+	}
+	captchaImage, err := newCaptchaImage(config.Width, config.Height, fontColor)
 
 	//背景有像素点干扰
 	if config.IsShowNoiseDot {
@@ -386,7 +399,7 @@ func EngineCharCreate(config ConfigCharacter) *CaptchaImageChar {
 			captchaImage.VerifyValue = captchaContent
 		}
 	}
-	
+
 	//写入string
 	captchaImage.drawText(captchaContent, config.IsUseSimpleFont)
 	captchaImage.Content = captchaContent

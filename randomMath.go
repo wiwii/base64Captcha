@@ -119,3 +119,34 @@ func randColor() color.RGBA {
 func randSeed() *rand.Rand {
 	return rand.New(rand.NewSource(time.Now().UnixNano()))
 }
+
+//randColor get random color. 生成随机颜色.
+func randColorZone(zone [][]uint8, f func(color.RGBA) color.RGBA) color.RGBA {
+	r := randSeed()
+
+	for k,v := range zone {
+		for k2,v2 := range v {
+			if v2 < 0 {
+				zone[k][k2] = 0
+			} else if v2 > 255 {
+				zone[k][k2] = 255
+			}
+		}
+	}
+
+	red := r.Intn(int(zone[0][0])) + int(zone[0][1])
+	green := r.Intn(int(zone[1][0])) + int(zone[1][1])
+	blue := r.Intn(int(zone[2][0])) + int(zone[2][1])
+
+	if (red + green) > 400 {
+		blue = 0
+	} else {
+		blue = 400 - green - red
+	}
+	if blue > 255 {
+		blue = 255
+	}
+	rgba := color.RGBA{R: uint8(red), G: uint8(green), B: uint8(blue), A: uint8(255)}
+	rgba2 := f(rgba)
+	return rgba2
+}
