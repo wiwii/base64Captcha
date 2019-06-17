@@ -58,6 +58,7 @@ type ConfigCharacter struct {
 	// 自定义颜色范围
 	IsUseCustomFontColor bool
 	FontColorFilter func(color.RGBA) color.RGBA
+	fontSizeMin float64
 
 	// CaptchaLen Default number of digits in captcha solution.
 	// 默认数字验证长度6.
@@ -305,7 +306,7 @@ func (captcha *CaptchaImageChar) drawTextNoise(complex int, isSimpleFont bool) e
 }
 
 //drawText draw captcha string to image.把文字写入图像验证码
-func (captcha *CaptchaImageChar) drawText(text string, isSimpleFont bool) error {
+func (captcha *CaptchaImageChar) drawText(text string, isSimpleFont bool, fontSizeMin float64) error {
 	c := freetype.NewContext()
 	c.SetDPI(imageStringDpi)
 
@@ -314,10 +315,13 @@ func (captcha *CaptchaImageChar) drawText(text string, isSimpleFont bool) error 
 	c.SetHinting(font.HintingFull)
 
 	fontWidth := captcha.ImageWidth / len(text)
+	if fontSizeMin == 0 {
+		fontSizeMin = 1
+	}
 
 	for i, s := range text {
 
-		fontSize := float64(captcha.ImageHeight) / (1 + float64(rand.Intn(7))/float64(9))
+		fontSize := float64(captcha.ImageHeight) / (fontSizeMin + float64(rand.Intn(7))/float64(9))
 
 		c.SetSrc(image.NewUniform(randDeepColor()))
 		c.SetFontSize(fontSize)
@@ -401,7 +405,7 @@ func EngineCharCreate(config ConfigCharacter) *CaptchaImageChar {
 	}
 
 	//写入string
-	captchaImage.drawText(captchaContent, config.IsUseSimpleFont)
+	captchaImage.drawText(captchaContent, config.IsUseSimpleFont, config.fontSizeMin)
 	captchaImage.Content = captchaContent
 	//captchaImage.drawText(randText(4))
 
