@@ -20,7 +20,7 @@ func readFontsToSliceOfTrueTypeFonts() []FontNameBinPair {
 	assetFontNames := []string{"fonts/RitaSmith.ttf",
 		"fonts/actionj.ttf", "fonts/chromohv.ttf",
 		"fonts/Flim-Flam.ttf", "fonts/DeborahFancyDress.ttf",
-		"fonts/DENNEthree-dee.ttf", "fonts/Comismsh.ttf",
+		"fonts/DENNEthree-dee.ttf", // "fonts/Comismsh.ttf", 字体大小和别的不一致
 		"fonts/ApothecaryFont.ttf", "fonts/3Dumb.ttf"}
 	for _, assetName := range assetFontNames {
 		fonts = appendAssetFontToTrueTypeFonts(assetName, fonts)
