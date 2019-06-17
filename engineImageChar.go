@@ -57,8 +57,8 @@ type ConfigCharacter struct {
 	FontColorZone [][]int
 	// 自定义颜色范围
 	IsUseCustomFontColor bool
-	FontColorFilter func(color.RGBA) color.RGBA
-	FontSizeMin float64
+	FontColorFilter      func(color.RGBA) color.RGBA
+	FontSizeMin          float64
 
 	// CaptchaLen Default number of digits in captcha solution.
 	// 默认数字验证长度6.
@@ -320,10 +320,11 @@ func (captcha *CaptchaImageChar) drawText(text string, isSimpleFont bool, fontSi
 	}
 
 	for i, s := range text {
-		fontSize := float64(captcha.ImageHeight) / (1 + float64(rand.Intn(7))/float64(9))
-		if fontSize < fontSizeMin {
-			fontSize = fontSizeMin
+		f := float64(rand.Intn(7)) / float64(9)
+		if f > fontSizeMin {
+			f = fontSizeMin
 		}
+		fontSize := float64(captcha.ImageHeight) / (1 + f)
 
 		c.SetSrc(image.NewUniform(randDeepColor()))
 		c.SetFontSize(fontSize)
