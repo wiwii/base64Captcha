@@ -306,7 +306,7 @@ func (captcha *CaptchaImageChar) drawTextNoise(complex int, isSimpleFont bool) e
 }
 
 //drawText draw captcha string to image.把文字写入图像验证码
-func (captcha *CaptchaImageChar) drawText(text string, isSimpleFont bool, fontSizeMin float64) error {
+func (captcha *CaptchaImageChar) drawText(text string, isSimpleFont bool, config ConfigCharacter) error {
 	c := freetype.NewContext()
 	c.SetDPI(imageStringDpi)
 
@@ -315,18 +315,21 @@ func (captcha *CaptchaImageChar) drawText(text string, isSimpleFont bool, fontSi
 	c.SetHinting(font.HintingFull)
 
 	fontWidth := captcha.ImageWidth / len(text)
-	if fontSizeMin == 0 {
-		fontSizeMin = 1
-	}
-
+	r := randSeed()
 	for i, s := range text {
 		f := float64(rand.Intn(7)) / float64(9)
-		if f > fontSizeMin {
-			f = fontSizeMin
+		if f > config.FontSizeMin {
+			f = config.FontSizeMin
 		}
 		fontSize := float64(captcha.ImageHeight) / (1 + f)
 
-		c.SetSrc(image.NewUniform(randDeepColor()))
+		var fontColor color.RGBA
+		if config.IsUseCustomFontColor {
+			fontColor = randDeepColorZone(r, config.FontColorZone, config.FontColorFilter)
+		} else {
+			fontColor = randDeepColor()
+		}
+		c.SetSrc(image.NewUniform(fontColor))
 		c.SetFontSize(fontSize)
 
 		if isSimpleFont {
@@ -354,14 +357,7 @@ func (captcha *CaptchaImageChar) drawText(text string, isSimpleFont bool, fontSi
 
 //EngineCharCreate create captcha with config struct.
 func EngineCharCreate(config ConfigCharacter) *CaptchaImageChar {
-	var fontColor color.RGBA
-	r := randSeed()
-	if config.IsUseCustomFontColor {
-		fontColor = randColorZone(r, config.FontColorZone, config.FontColorFilter)
-	} else {
-		fontColor = randLightColor()
-	}
-	captchaImage, err := newCaptchaImage(config.Width, config.Height, fontColor)
+	captchaImage, err := newCaptchaImage(config.Width, config.Height, randLightColor())
 
 	//背景有像素点干扰
 	if config.IsShowNoiseDot {
@@ -409,7 +405,7 @@ func EngineCharCreate(config ConfigCharacter) *CaptchaImageChar {
 	}
 
 	//写入string
-	captchaImage.drawText(captchaContent, config.IsUseSimpleFont, config.FontSizeMin)
+	captchaImage.drawText(captchaContent, config.IsUseSimpleFont, config)
 	captchaImage.Content = captchaContent
 	//captchaImage.drawText(randText(4))
 

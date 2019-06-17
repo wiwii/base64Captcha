@@ -135,9 +135,32 @@ func randColorZone(r *rand.Rand, zone [][]int, f func(color.RGBA) color.RGBA) co
 	red := r.Intn(zone[0][0]) + zone[0][1]
 	green := r.Intn(zone[1][0]) + zone[1][1]
 	blue := r.Intn(zone[2][0]) + zone[2][1]
+	if (red + green) > 400 {
+		blue = 0
+	} else {
+		blue = 400 - green - red
+	}
+	if blue > 255 {
+		blue = 255
+	}
 	rgba := color.RGBA{R: uint8(red), G: uint8(green), B: uint8(blue), A: uint8(255)}
 	if f != nil {
 		rgba = f(rgba)
 	}
 	return rgba
 }
+
+//randDeepColor get random deep color. 随机生成深色系.
+func randDeepColorZone(r *rand.Rand, zone [][]int, f func(color.RGBA) color.RGBA) color.RGBA {
+	randColor := randColorZone(r, zone, f)
+
+	increase := float64(30 + r.Intn(255))
+
+	red := math.Abs(math.Min(float64(randColor.R)-increase, 255))
+
+	green := math.Abs(math.Min(float64(randColor.G)-increase, 255))
+	blue := math.Abs(math.Min(float64(randColor.B)-increase, 255))
+
+	return color.RGBA{R: uint8(red), G: uint8(green), B: uint8(blue), A: uint8(255)}
+}
+
