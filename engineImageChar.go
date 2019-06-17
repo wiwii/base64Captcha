@@ -395,6 +395,9 @@ func EngineCharCreate(config ConfigCharacter) *CaptchaImageChar {
 		case CaptchaModeAlphabet:
 			captchaContent = randText(config.CaptchaLen, TxtAlphabet)
 			captchaImage.VerifyValue = captchaContent
+		case CaptchaModeAlphabetUpper:
+			captchaContent = randText(config.CaptchaLen, TxtAlphabetUpper)
+			captchaImage.VerifyValue = captchaContent
 		case CaptchaModeArithmetic:
 			captchaContent, captchaImage.VerifyValue = randArithmetic()
 

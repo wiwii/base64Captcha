@@ -6,6 +6,7 @@ const (
 	TxtNumbers = "012346789"
 	//TxtAlphabet characters for alphabet.
 	TxtAlphabet = "ABCDEFGHJKMNOQRSTUVXYZabcdefghjkmnoqrstuvxyz"
+	TxtAlphabetUpper = "ABCDEFGHJKMNOQRSTUVXYZ"
 	//TxtSimpleCharaters simple numbers and alphabet
 	TxtSimpleCharaters = "13467ertyiadfhjkxcvbnERTYADFGHJKXCVBN"
 
@@ -36,6 +37,7 @@ const (
 	CaptchaModeArithmetic
 	//CaptchaModeNumberAlphabet mode mix number and alphabet,this is also default mode.
 	CaptchaModeNumberAlphabet
+	CaptchaModeAlphabetUpper
 )
 
 //GoTestOutputDir run go test command where the png and wav file output
